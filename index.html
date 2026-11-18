@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>JEEZ — Enderman</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2305030a'/%3E%3Crect x='5' y='13' width='9' height='5' fill='%23e07bff'/%3E%3Crect x='18' y='13' width='9' height='5' fill='%23e07bff'/%3E%3Crect x='7.5' y='13' width='4' height='5' fill='%23fff'/%3E%3Crect x='20.5' y='13' width='4' height='5' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap">
+<style>
+:root{--bg:#f3eefb;--fg:#17102a;--mute:#6b5f86;--card:#ffffffb0;--line:#17102a22;--glow:#9b2dff;--eye:#b43cff;--nav0:#f3eefbf2;--nav1:#f3eefb99;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#05030a;--fg:#f1eaff;--mute:#9b8fb8;--card:#ffffff08;--line:#ffffff1f;--glow:#c04bff;--eye:#e07bff;--nav0:#05030af2;--nav1:#05030a99}}
+:root[data-theme="dark"]{--nav0:#05030af2;--nav1:#05030a99;color-scheme:dark;--bg:#05030a;--fg:#f1eaff;--mute:#9b8fb8;--card:#ffffff08;--line:#ffffff1f;--glow:#c04bff;--eye:#e07bff}
+html{scroll-snap-type:y proximity;scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:"Space Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;overflow-x:hidden}
+canvas#fx{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+main{position:relative;z-index:1}
+section{scroll-snap-align:start;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6rem 1.5rem;text-align:center}
+nav{position:fixed;top:0;left:0;right:0;z-index:5;display:flex;justify-content:space-between;align-items:center;padding:calc(1rem + env(safe-area-inset-top,0px)) 1.5rem 1rem;letter-spacing:.3em;font-size:.75rem;text-transform:uppercase;background:linear-gradient(to bottom,var(--nav0),var(--nav1));backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+nav::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,transparent,var(--glow) 20%,var(--glow) 80%,transparent);box-shadow:0 0 14px 1px var(--glow)}
+nav a{color:var(--fg);text-decoration:none;opacity:.7;margin-left:1.2rem}
+nav a:hover{opacity:1;color:var(--glow)}
+.face{display:flex;gap:clamp(1.5rem,6vw,3.5rem);margin-bottom:3rem}
+.eye{width:clamp(70px,16vw,120px);height:clamp(22px,5vw,36px);background:var(--eye);border-radius:2px;box-shadow:0 0 30px 6px var(--glow),0 0 90px 20px color-mix(in srgb,var(--glow) 40%,transparent);position:relative;animation:blink 6s infinite;overflow:hidden}
+.eye i{position:absolute;top:0;bottom:0;width:38%;background:#fff;left:31%;transition:transform .08s}
+@keyframes blink{0%,94%,100%{transform:scaleY(1)}96%{transform:scaleY(.08)}}
+h1{font-weight:700;font-size:clamp(3.5rem,16vw,11rem);letter-spacing:.18em;margin:0 0 0 .18em;line-height:1}
+.tag{color:var(--mute);letter-spacing:.35em;text-transform:uppercase;font-size:.8rem;margin-top:1.5rem}
+.cta{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin-top:3rem}
+.btn{padding:.9rem 2rem;border:1px solid var(--line);border-radius:999px;color:var(--fg);text-decoration:none;font-size:.85rem;letter-spacing:.2em;text-transform:uppercase;background:var(--card);transition:.25s}
+.btn:hover{border-color:var(--glow);box-shadow:0 0 24px color-mix(in srgb,var(--glow) 55%,transparent);transform:translateY(-2px)}
+h2{font-weight:300;font-size:clamp(1.8rem,5vw,3rem);letter-spacing:.1em;margin:0 0 1rem}
+p.lead{max-width:34rem;color:var(--mute);line-height:1.8;margin:0}
+.stats{display:flex;gap:clamp(1.5rem,6vw,4rem);flex-wrap:wrap;justify-content:center;margin-top:3rem}
+.stats b{display:block;font-size:clamp(2rem,6vw,3.2rem);font-weight:500;color:var(--glow)}
+.stats span{font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;color:var(--mute)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;width:100%;max-width:60rem;margin-top:2.5rem}
+.card{border:1px solid var(--line);background:var(--card);border-radius:18px;padding:2rem 1.5rem;text-align:left;backdrop-filter:blur(8px);transition:.3s}
+.card:hover{border-color:var(--glow);transform:translateY(-4px)}
+.card small{color:var(--glow);letter-spacing:.3em}
+.card h3{margin:0 0 .6rem;font-weight:500}
+.card p{margin:0;color:var(--mute);font-size:.9rem;line-height:1.6}
+footer{padding:2rem;text-align:center;color:var(--mute);font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;position:relative;z-index:1}
+.brand{display:flex;align-items:center;gap:.7rem;background:none;border:0;color:var(--fg);font:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer;padding:0}
+.brand svg{width:22px;height:22px;flex:none}
+.brand .d{width:18px;height:18px;fill:currentColor;opacity:.6}
+.brand:hover{color:var(--glow)}
+.brand:hover .d{opacity:1}
+@media (max-width:520px){nav{letter-spacing:.12em;font-size:.65rem;padding-left:1rem;padding-right:1rem}nav a{margin-left:.7rem}}
+#modal{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:1.5rem;background:#000000b3;backdrop-filter:blur(6px)}
+#modal[hidden]{display:none}
+.dc{width:100%;max-width:26rem;background:#313338;color:#dbdee1;border-radius:10px;padding:1rem;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;box-shadow:0 20px 60px #000a}
+.dc-top{display:flex;align-items:center;gap:.5rem;color:#949ba4;font-size:.75rem;margin-bottom:1rem}
+.dc-top svg{width:18px;height:18px;fill:#5865f2}
+.x{margin-left:auto;background:none;border:0;color:#949ba4;font-size:1.1rem;cursor:pointer}
+.msg{display:flex;gap:.8rem;text-align:left}
+.av{width:40px;height:40px;border-radius:50%;flex:none;overflow:hidden}
+.av svg{width:100%;height:100%}
+.nm{font-weight:600;color:#fff;font-size:.95rem}
+.bot{background:#5865f2;color:#fff;font-size:.6rem;border-radius:3px;padding:1px 5px;margin-left:.4rem;vertical-align:middle}
+.ts{color:#949ba4;font-size:.7rem;margin-left:.5rem;font-weight:400}
+.emb{margin-top:.4rem;background:#2b2d31;border-left:4px solid #b43cff;border-radius:4px;padding:.7rem .9rem}
+.emb b{display:block;color:#fff;margin-bottom:.3rem}
+.emb p{margin:0;font-size:.85rem;color:#b5bac1;line-height:1.5}
+.emb small{display:block;margin-top:.6rem;font-size:.7rem;color:#949ba4}
+#nx{position:fixed;left:50%;bottom:calc(1.5rem + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:6;width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--fg);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);cursor:pointer;display:grid;place-items:center;transition:.25s;animation:bob 2.4s ease-in-out infinite}
+#nx svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .3s}
+#nx:hover{border-color:var(--glow);color:var(--glow);box-shadow:0 0 22px color-mix(in srgb,var(--glow) 55%,transparent)}
+#nx.up svg{transform:rotate(180deg)}
+@keyframes bob{0%,100%{margin-bottom:0}50%{margin-bottom:6px}}
+</style>
+</head>
+<body>
+<canvas id="fx"></canvas>
+<div id="modal" hidden><div class="dc" role="dialog" aria-label="Discord"><div class="dc-top"><svg viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg><span>Webhook</span><button class="x" aria-label="Cerrar">✕</button></div><div class="msg"><div class="av"><svg viewBox="0 0 32 32"><rect width="32" height="32" fill="#05030a"/><rect x="5" y="13" width="9" height="5" fill="#e07bff"/><rect x="18" y="13" width="9" height="5" fill="#e07bff"/><rect x="7.5" y="13" width="4" height="5" fill="#fff"/><rect x="20.5" y="13" width="4" height="5" fill="#fff"/></svg></div><div><div class="nm">JEEZ<span class="bot">BOT</span><span class="ts">Hoy</span></div><div class="emb"><b>Próximamente</b><p>Esta webhook todavía está vacía. Pronto habrá novedades desde el End.</p><small>Webhook de JEEZ</small></div></div></div></div></div>
+<nav><button class="brand" id="dc" aria-label="Abrir Discord"><svg viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#05030a"/><rect x="5" y="13" width="9" height="5" fill="#e07bff"/><rect x="18" y="13" width="9" height="5" fill="#e07bff"/><rect x="7.5" y="13" width="4" height="5" fill="#fff"/><rect x="20.5" y="13" width="4" height="5" fill="#fff"/></svg><span>JEEZ</span><svg class="d" viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg></button><div><a href="#sobre">Sobre</a><a href="#contenido">Contenido</a><a href="#redes">Redes</a></div></nav>
+<main>
+<section id="inicio">
+  <div class="face"><div class="eye"><i></i></div><div class="eye"><i></i></div></div>
+  <h1>JEEZ</h1>
+  <div class="tag">Enderman · Creador de contenido</div>
+  <div class="cta"><a class="btn" href="https://www.youtube.com/@JeezosYT" target="_blank" rel="noopener">YouTube</a><a class="btn" href="https://kick.com/jeezos" target="_blank" rel="noopener">Kick</a><a class="btn" href="https://www.tiktok.com/@jeezos11" target="_blank" rel="noopener">TikTok</a></div>
+</section>
+<section id="sobre">
+  <h2>Del End a tu pantalla</h2>
+  <p class="lead">Teletransportándose entre videos, directos y clips. Jeez trae el caos tranquilo del Enderman al mundo de Minecraft: contenido corto, directo y sin ruido.</p>
+  <div class="stats">
+    <div><b id="s-yt">—</b><span>Suscriptores YouTube</span></div>
+    <div><b id="s-tt">—</b><span>Seguidores TikTok</span></div>
+    <div><b id="s-kk">—</b><span>Seguidores Kick</span></div>
+    <div><b id="s-vd">—</b><span>Videos</span></div>
+  </div>
+</section>
+<section id="contenido">
+  <h2>Contenido</h2>
+  <p class="lead">Tres dimensiones, un solo Enderman.</p>
+  <div class="grid">
+    <div class="card"><h3>Videos</h3><p>Aventuras, retos y momentos épicos en YouTube.</p></div>
+    <div class="card"><h3>Clips</h3><p>Lo mejor en vertical, directo a tu feed de TikTok.</p></div>
+    <div class="card"><h3>Directos</h3><p>Streams en vivo en TikTok y Kick con la comunidad del End.</p></div>
+  </div>
+</section>
+<section id="redes">
+  <h2>Mírame a los ojos</h2>
+  <p class="lead">Pero no por mucho tiempo, que me enojo.</p>
+  <div class="cta"><a class="btn" href="https://www.youtube.com/@JeezosYT" target="_blank" rel="noopener">YouTube</a><a class="btn" href="https://kick.com/jeezos" target="_blank" rel="noopener">Kick</a><a class="btn" href="https://www.tiktok.com/@jeezos11" target="_blank" rel="noopener">TikTok</a></div>
+</section>
+</main>
+<button id="nx" aria-label="Bajar a la siguiente sección"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+<footer>© 2026 JEEZ · No mires directamente al Enderman</footer>
+<script>
+(function(){
+var m=document.getElementById('modal');
+document.getElementById('dc').addEventListener('click',function(){m.hidden=false});
+m.addEventListener('click',function(e){if(e.target===m||e.target.closest('.x'))m.hidden=true});
+addEventListener('keydown',function(e){if(e.key==='Escape')m.hidden=true});
+var S=[].slice.call(document.querySelectorAll('section')),nx=document.getElementById('nx');
+function nxt(){for(var i=0;i<S.length;i++){if(S[i].getBoundingClientRect().top>8)return S[i]}return null}
+nx.addEventListener('click',function(){(nxt()||S[0]).scrollIntoView({behavior:'smooth'})});
+function upd(){nx.classList.toggle('up',!nxt())}
+addEventListener('scroll',upd,{passive:true});upd();
+function fmt(n){if(!n)return'—';if(n>=1e6)return(n/1e6).toFixed(n>=1e7?0:1).replace('.0','')+'M';if(n>=1e3)return(n/1e3).toFixed(n>=1e4?0:1).replace('.0','')+'K';return String(n)}
+function put(id,v){var e=document.getElementById(id);if(e)e.textContent=fmt(v)}
+function stats(){fetch('stats.json?'+Date.now()).then(function(r){return r.json()}).then(function(d){put('s-yt',d.youtube&&d.youtube.subs);put('s-tt',d.tiktok&&d.tiktok.followers);put('s-kk',d.kick&&d.kick.followers);put('s-vd',d.youtube&&d.youtube.videos)}).catch(function(){})}
+stats();setInterval(stats,600000);
+var eyes=document.querySelectorAll('.eye i');
+function look(x,y){var w=innerWidth,h=innerHeight;var dx=(x/w-.5)*2,dy=(y/h-.5)*2;
+eyes.forEach(function(e){e.style.transform='translate('+(dx*45)+'%,'+(dy*35)+'%)'})}
+addEventListener('pointermove',function(e){look(e.clientX,e.clientY)});
+var c=document.getElementById('fx'),x=c.getContext('2d'),P=[];
+function size(){c.width=innerWidth;c.height=innerHeight}
+size();addEventListener('resize',size);
+for(var i=0;i<60;i++)P.push({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*1.8+.4,v:Math.random()*.15+.03,a:Math.random()*Math.PI*2});
+var L=[];for(var j=0;j<18;j++)L.push({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*1.6+1.2,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,a:Math.random()*6.28});
+function col(){return getComputedStyle(document.documentElement).getPropertyValue('--glow').trim()||'#c04bff'}
+var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+function tick(){x.clearRect(0,0,c.width,c.height);var g=col();x.fillStyle=g;L.forEach(function(l){l.x+=l.vx+Math.sin(l.a)*.15;l.y+=l.vy+Math.cos(l.a)*.15;l.a+=.006;if(l.x<-20)l.x=c.width+20;if(l.x>c.width+20)l.x=-20;if(l.y<-20)l.y=c.height+20;if(l.y>c.height+20)l.y=-20;var gr=x.createRadialGradient(l.x,l.y,0,l.x,l.y,l.r*6);gr.addColorStop(0,g);gr.addColorStop(1,'rgba(0,0,0,0)');x.globalAlpha=.3+.3*Math.sin(l.a*3);x.fillStyle=gr;x.beginPath();x.arc(l.x,l.y,l.r*6,0,6.283);x.fill()});x.fillStyle=g;
+P.forEach(function(p){p.y-=p.v;p.a+=.008;p.x+=Math.sin(p.a)*.12;if(p.y<-5){p.y=c.height+5;p.x=Math.random()*c.width}
+x.globalAlpha=.25+.35*Math.abs(Math.sin(p.a));x.fillRect(p.x,p.y,p.r*2,p.r*2)});
+x.globalAlpha=1;requestAnimationFrame(tick)}
+tick();
+})();
+</script>
+</body>
+</html>
